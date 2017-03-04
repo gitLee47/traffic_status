@@ -165,7 +165,7 @@ function createCharts(tdata) {
 			.attr("stroke", "#ddd")
 			.attr("stroke-opacity", 0.8)
 			.attr("marker-end", "url(#end)");
-	
+	/*
 	var label = svg.selectAll('text')
 			.data(links)
 		  .enter().append('text')
@@ -174,7 +174,7 @@ function createCharts(tdata) {
 			.attr("text-anchor", "middle") 
 			.attr("fill-opacity",0)
 			.text(function(d) {return d.traffic;}); 	
-			
+	*/		
 	// Create the node circles.
 	var node = svg.selectAll(".node")
       .data(nodes)
@@ -242,7 +242,9 @@ function createCharts(tdata) {
 		function tabulate(data, columns) {
 			table = d3.select('#summary')
 			  .append('table')
-			  .attr("id","summTable");
+			  .attr("id","summTable")
+			  .attr("height", height);
+			  
 			var thead = table.append('thead');
 			var	tbody = table.append('tbody');
 			// append the header row
@@ -274,7 +276,7 @@ function createCharts(tdata) {
 		
 		// render the table(s)
 		tabulate(tableData, ['srcObj', 'destObj','packets','traffic']); // 4 column table
-		
+		/*
 		label.attr("fill-opacity", function(l) {
 			if (l.source == d || l.target == d){ 
 				return 1; 
@@ -282,7 +284,7 @@ function createCharts(tdata) {
 			else { 
 				return 0;
 			}
-		});
+		});*/
 		
 		//highlighting marker
 		//console.log(link);
@@ -321,7 +323,7 @@ function createCharts(tdata) {
 		link.attr("stroke", "#ddd")
 			.attr("stroke-opacity", 0.8);
 		
-		label.attr("fill-opacity", 0);
+		//label.attr("fill-opacity", 0);
 		
 		d3.select("#summTable").remove();
 

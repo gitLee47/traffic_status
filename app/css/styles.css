@@ -34,4 +34,41 @@ html, body {
     border-top: 1px solid black; 
 }
 
+.center {
+	text-align: center;
+}
+
+.summaryCont {
+	 height: 500px;
+}
+
+.footerBox {
+    text-align: center;
+    margin: 40px 0 50px;
+    color: #4D6879;
+    font-size: 16px;
+}
+
+table {
+  margin: 0 auto;
+  text-align: center;
+  border-collapse: collapse;
+  border: 1px solid #d4d4d4;
+  width:400px;
+}
+ 
+tr:nth-child(even) {
+  background: #d4d4d4;
+}
+
+th, td {
+  text-align: center;
+  padding: 10px 30px;
+}
+
+th {
+  text-align: center !important;
+  border-bottom: 1px solid #d4d4d4;
+  background-color: #d4ffd4;
+} 
 

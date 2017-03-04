@@ -16,20 +16,38 @@
         -->
     </head>
     <body>
-		<div class="row">
-		  <div class="col-md-8">
-			<div id="vizContainer">
-           
+		<div class="container-fluid">
+			<div class="row">
+				<div class="col-md-8">
+					<div class="panel panel-primary">
+						<!-- Default panel contents -->
+						<div id="graphHeading" class="panel-heading center">Graph</div>
+					  
+
+						<div id="vizContainer">
+					   
+						</div>
+					</div>
+				</div>
+			  
+				<div class="col-md-4">
+					<div class="panel panel-success">
+					  <!-- Default panel contents -->
+						<div id="tableHeading" class="panel-heading center">Summary Table</div>
+					  
+					  <!-- Table -->
+						<div class="summaryCont" id="summary">
+				   
+						</div>
+					</div>
+			  </div>
 			</div>
-		  </div>
-		  
-		  <div class="col-md-4">
-			<div id="summary">
-           
-			</div>
-		  </div>
 		</div>
-        
+		<div class="center"><div class="footerBox">
+			<p class="footerLinks"> 
+			<a href="mailto:lrg37@pitt.edu">Contact |</a> <a href="http://localhost:8000/"> Home |</a></p><p> This site is created and maintained by <a href="http://www.pitt.edu/" target="_blank">PicsoLab</a>. <br> This website is a non-profit and non-commercial venture.</p>
+			</div>
+		</div>
         <script src="js/mockAPIs.js"></script>
 		<script src="http://d3js.org/d3.v3.min.js"></script>
         <script src="js/src/script.js"></script>
