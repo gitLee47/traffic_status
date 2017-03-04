@@ -165,7 +165,16 @@ function createCharts(tdata) {
 			.attr("stroke", "#ddd")
 			.attr("stroke-opacity", 0.8)
 			.attr("marker-end", "url(#end)");
-
+	
+	var label = svg.selectAll('text')
+			.data(links)
+		  .enter().append('text')
+			//.attr("x", function(d) { return (d.source.y + d.target.y) / 2; }) 
+			//.attr("y", function(d) { return (d.source.x + d.target.x) / 2; }) 
+			.attr("text-anchor", "middle") 
+			.attr("fill-opacity",0)
+			.text(function(d) {return d.traffic;}); 	
+			
 	// Create the node circles.
 	var node = svg.selectAll(".node")
       .data(nodes)
@@ -199,15 +208,18 @@ function createCharts(tdata) {
 
 		node.attr("cx", function(d) { return d.x; })
 			.attr("cy", function(d) { return d.y; });
+		
+		label.attr("x", function(d) { return (d.source.x + d.target.x) / 2; }) 
+        .attr("y", function(d) { return (d.source.y + d.target.y) / 2; })
 	}
 	
 	//Mouseover tooltip function
 	function showDetails(d,i){
-		content = '<p class="">' + d.name + '</span></p>'
+		content = '<p class="">' + d.source + '</span></p>'
 		content += '<hr class="">'
-		content += '<p class="">' + d.name + '</span></p>'
+		content += '<p class="">' + d.target + '</span></p>'
 		//tooltip.showTooltip(content,d3.event)
-
+		//console.log(content);
 		//higlight connected links
 		link.attr("stroke", function(l) {
 			if (l.source == d || l.target == d){ 
@@ -224,14 +236,20 @@ function createCharts(tdata) {
 				return 0.5;
 		});
 		
-		//highlighting marker
-		marker.attr("stroke", function(l) {
-			return "red";
-		  })
-		  .attr("stroke-opacity", function(l){
-				return 1.0; 
-			
+		label.attr("fill-opacity", function(l) {
+			if (l.source == d || l.target == d){ 
+				return 1; 
+			}
+			else { 
+				return 0;
+			}
 		});
+		
+		//highlighting marker
+		//console.log(link);
+		//marker[0][0].style.stroke = "red"
+		//marker[0][0].attr("stroke", "red")
+		 // .attr("stroke-opacity", 1.0);
 		
 		//highlight neighboring nodes
 		node.style("stroke", function(n){
@@ -263,6 +281,8 @@ function createCharts(tdata) {
 
 		link.attr("stroke", "#ddd")
 			.attr("stroke-opacity", 0.8);
+		
+		label.attr("fill-opacity", 0);
 	}
 }
 
