@@ -86,7 +86,9 @@ var svg = d3.select(".demoContainer").append("svg")
 	//.append('svg:g')
 		.call(d3.behavior.zoom().on("zoom", redraw))
 	.append('svg:g');
+	
 
+	
 function redraw() {
   //console.log("here", d3.event.translate, d3.event.scale);
   svg.attr("transform","translate(" + d3.event.translate + ")"+ " scale(" + d3.event.scale + ")");
@@ -144,7 +146,7 @@ function createCharts(tdata) {
 	// Per-type markers, as they don't inherit styles.
 	var marker = svg.append("defs").selectAll("marker")
 				.data(["end"])
-			  .enter().append("marker")
+			.enter().append("marker")
 				.attr("id", function(d) { return d; })
 				.attr("viewBox", "0 -5 10 10")
 				.attr("refX", 25)
@@ -152,7 +154,7 @@ function createCharts(tdata) {
 				.attr("markerWidth", 6)
 				.attr("markerHeight", 6)
 				.attr("orient", "auto")
-			  .append("path")
+			.append("path")
 				.attr("d", "M0,-5L10,0L0,5 L10,0 L0, -5")
 				.style("stroke", "#4679BD")
 				.style("opacity", "0.6");
@@ -201,19 +203,20 @@ function createCharts(tdata) {
       .start();
 
 	function tick() {
+		
 		link.attr("x1", function(d) { return d.source.x; })
 			.attr("y1", function(d) { return d.source.y; })
 			.attr("x2", function(d) { return d.target.x; })
-			.attr("y2", function(d) { return d.target.y; });
-
+			.attr("y2", function(d) { return d.target.y; }); 
+	
 		node.attr("cx", function(d) { return d.x; })
 			.attr("cy", function(d) { return d.y; });
 		
 		label.attr("x", function(d) { return (d.source.x + d.target.x) / 2; }) 
         .attr("y", function(d) { return (d.source.y + d.target.y) / 2; })
 	}
-	
-	//Mouseover tooltip function
+	 
+	//Mouseover function
 	function showDetails(d,i){
 		content = '<p class="">' + d.source + '</span></p>'
 		content += '<hr class="">'
@@ -221,8 +224,10 @@ function createCharts(tdata) {
 		//tooltip.showTooltip(content,d3.event)
 		//console.log(content);
 		//higlight connected links
+		var tableData = [];
 		link.attr("stroke", function(l) {
 			if (l.source == d || l.target == d){ 
+				tableData.push(l);
 				return "red"; 
 			}
 			else { 
@@ -235,6 +240,42 @@ function createCharts(tdata) {
 			else 
 				return 0.5;
 		});
+		var table;
+		function tabulate(data, columns) {
+			table = d3.select('.demoContainer')
+			  .append('table')
+			  .attr("id","summTable");
+			var thead = table.append('thead');
+			var	tbody = table.append('tbody');
+			// append the header row
+			thead.append('tr')
+			  .selectAll('th')
+			  .data(columns).enter()
+			  .append('th')
+				.text(function (column) { return column; });
+
+			// create a row for each object in the data
+			var rows = tbody.selectAll('tr')
+			  .data(data)
+			  .enter()
+			  .append('tr');
+
+			// create a cell in each row for each column
+			var cells = rows.selectAll('td')
+			  .data(function (row) {
+				return columns.map(function (column) {
+				  return {column: column, value: row[column]};
+				});
+			  })
+			  .enter()
+			  .append('td')
+				.text(function (d) { return d.value; });
+
+		  return table;
+		}
+		
+		// render the table(s)
+		tabulate(tableData, ['srcObj', 'destObj']); // 2 column table
 		
 		label.attr("fill-opacity", function(l) {
 			if (l.source == d || l.target == d){ 
@@ -283,6 +324,9 @@ function createCharts(tdata) {
 			.attr("stroke-opacity", 0.8);
 		
 		label.attr("fill-opacity", 0);
+		
+		d3.select("#summTable").remove();
+
 	}
 }
 
