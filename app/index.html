@@ -4,19 +4,32 @@
         <title>Juniper Networks: Contrail -- Coding Challenge</title>
         <!-- feel free to remove below link to demo.css, if you don't use it -->
         <link rel="stylesheet" type="text/css" href="css/styles.css" />
-
+		<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" />
+		
         <script src="https://cdn.jsdelivr.net/lodash/4.17.4/lodash.min.js"></script>
         <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
         <script src="js/vendor/jquery.mockjax.min.js"></script>
+		<script src="js/vendor/bootstrap.min.js"></script>
         <!--
             Add your allowed additional libraries/frameworks here
             you can use CDN or local files (put them under the "vendor" folder).
         -->
     </head>
     <body>
-        <div class="demoContainer">
+		<div class="row">
+		  <div class="col-md-8">
+			<div id="vizContainer">
            
-        </div>
+			</div>
+		  </div>
+		  
+		  <div class="col-md-4">
+			<div id="summary">
+           
+			</div>
+		  </div>
+		</div>
+        
         <script src="js/mockAPIs.js"></script>
 		<script src="http://d3js.org/d3.v3.min.js"></script>
         <script src="js/src/script.js"></script>

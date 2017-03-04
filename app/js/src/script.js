@@ -80,15 +80,13 @@ var force = d3.layout.force()
     .charge(-100)
     .size([width, height]);
 
-var svg = d3.select(".demoContainer").append("svg")
+var svg = d3.select("#vizContainer").append("svg")
     .attr("width", width)
     .attr("height", height)
 	//.append('svg:g')
 		.call(d3.behavior.zoom().on("zoom", redraw))
 	.append('svg:g');
-	
 
-	
 function redraw() {
   //console.log("here", d3.event.translate, d3.event.scale);
   svg.attr("transform","translate(" + d3.event.translate + ")"+ " scale(" + d3.event.scale + ")");
@@ -212,8 +210,8 @@ function createCharts(tdata) {
 		node.attr("cx", function(d) { return d.x; })
 			.attr("cy", function(d) { return d.y; });
 		
-		label.attr("x", function(d) { return (d.source.x + d.target.x) / 2; }) 
-        .attr("y", function(d) { return (d.source.y + d.target.y) / 2; })
+		//label.attr("x", function(d) { return (d.source.x + d.target.x) / 2; }) 
+        //.attr("y", function(d) { return (d.source.y + d.target.y) / 2; })
 	}
 	 
 	//Mouseover function
@@ -242,7 +240,7 @@ function createCharts(tdata) {
 		});
 		var table;
 		function tabulate(data, columns) {
-			table = d3.select('.demoContainer')
+			table = d3.select('#summary')
 			  .append('table')
 			  .attr("id","summTable");
 			var thead = table.append('thead');
@@ -275,7 +273,7 @@ function createCharts(tdata) {
 		}
 		
 		// render the table(s)
-		tabulate(tableData, ['srcObj', 'destObj']); // 2 column table
+		tabulate(tableData, ['srcObj', 'destObj','packets','traffic']); // 4 column table
 		
 		label.attr("fill-opacity", function(l) {
 			if (l.source == d || l.target == d){ 
