@@ -1,39 +1,3 @@
-html, body {
-    margin: 0;
-    padding: 0;
-    height: 100%;
-    overflow: hidden;
-}
-
-.demoContainer {
-    display: flex;
-    justify-content: space-around;
-    height: 100%;
-}
-
-.demoSectionWrapepr {
-    display: inline-block;
-    width: 98%;
-}
-
-.demoResponseList {
-    background-color: lightgrey;
-    margin: 0;
-    padding-right: 5px;
-    overflow-y: scroll;
-    height: calc(100% - 3px * 2 * 12);
-}
-
-.demoResponseList li {
-    list-style-type: decimal;
-    padding: 3px 0;
-    word-wrap: break-word;
-}
-
-.demoResponseList li + li {
-    border-top: 1px solid black; 
-}
-
 .center {
 	text-align: center;
 }
@@ -71,4 +35,23 @@ th {
   border-bottom: 1px solid #d4d4d4;
   background-color: #d4ffd4;
 } 
+
+.bar {
+  fill: steelblue;
+}
+
+.axis text {
+  font: 10px sans-serif;
+}
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+.x.axis path {
+  display: none;
+}
 

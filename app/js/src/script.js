@@ -79,13 +79,29 @@ var force = d3.layout.force()
     .distance(200)
     .charge(-100)
     .size([width, height]);
-
+	
+//container for force graph
 var svg = d3.select("#vizContainer").append("svg")
     .attr("width", width)
     .attr("height", height)
 	//.append('svg:g')
 		.call(d3.behavior.zoom().on("zoom", redraw))
 	.append('svg:g');
+	
+//container for sent bar graph
+var margin = {top: 20, right: 20, bottom: 70, left: 40},
+    width = 600 - margin.left - margin.right,
+    height = 300 - margin.top - margin.bottom;
+	
+var sentBar = d3.select("#sentContainer").append("svg")
+			.attr("width", width + margin.left + margin.right)
+			.attr("height", height + margin.top + margin.bottom)
+		  .append("g")
+			.attr("transform", 
+				  "translate(" + margin.left + "," + margin.top + ")");
+
+var x = d3.scale.ordinal().rangeRoundBands([0, width], .1);
+var y = d3.scale.linear().range([height, 0]);
 
 function redraw() {
   //console.log("here", d3.event.translate, d3.event.scale);
@@ -121,12 +137,30 @@ function createCharts(tdata) {
 	
 	var nodesByName = {};
 	var linkedByIndex = {};
+	var sentTotal = new Object();
+	var recievedTotal =  new Object();
+	
 	
 	links.forEach(function(link) {
 		if(link.srcObj != null || link.destObj != null) {
 			link.source = nodeByName(link.srcObj,link.srcType);
 			link.target = nodeByName(link.destObj,link.destType);
 			linkedByIndex[link.srcObj + "," + link.destObj] = 1;
+			if (sentTotal.hasOwnProperty(link.srcObj)) {
+				//alert('key is: ' + k + ', value is: ' + h[k]);
+				sentTotal[link.srcObj] = sentTotal[link.srcObj] + link.packets;
+			}
+			else {
+				sentTotal[link.srcObj] = link.packets;
+			}
+			
+			if (recievedTotal.hasOwnProperty(link.destObj)) {
+				//alert('key is: ' + k + ', value is: ' + h[k]);
+				recievedTotal[link.destObj] = recievedTotal[link.destObj] + link.packets;
+			}
+			else {
+				recievedTotal[link.destObj] = link.packets;
+			}
 		}
 	});
 	
@@ -328,5 +362,45 @@ function createCharts(tdata) {
 		d3.select("#summTable").remove();
 
 	}
+
+	var sentArr = [];
+	var k = Object.getOwnPropertyNames(sentTotal);
+    var v = Object.values(sentTotal);
+
+	for (var i = 0; i < k.length; i++)
+    {
+        //console.log(k[i]+" "+v[i]);
+		sentArr.push({src:k[i], packets:v[i]})
+    }
+	
+	//Starting sent Bar Chart
+	var xAxis = d3.svg.axis()
+    .scale(x)
+    .orient("bottom");
+
+	var yAxis = d3.svg.axis()
+    .scale(y)
+    .orient("left");
+
+	x.domain(sentArr.map(function(d) { return d.src; }));
+	y.domain([0, d3.max(sentArr, function(d) { return d.packets; })]);
+	
+	sentBar.append("g")
+      .attr("class", "x axis")
+      .attr("transform", "translate(0," + height + ")")
+      .call(xAxis);
+
+	sentBar.append("g")
+	  .attr("class", "y axis")
+	  .call(yAxis);
+
+	sentBar.selectAll(".bar")
+      .data(sentArr)
+    .enter().append("rect")
+      .attr("class", "bar")
+      .attr("x", function(d) { return x(d.src); })
+      .attr("y", function(d) { return y(d.packets); })
+      .attr("height", function(d) { return height - y(d.packets); })
+      .attr("width", x.rangeBand());
 }
 
