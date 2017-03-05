@@ -34,7 +34,13 @@
 			</div>
 		  </div>
 		</nav>
+	
 		<div class="container-fluid maincontainer">
+			<div id="api-controls">
+				<div>Select an api to read from: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
+				<div class="api"><a href='javascript:loadAndStart("/traffic_status",true);'>traffic_status</a></div>
+				<div class="api"><a href='javascript:loadAndStart("/traffic_status/frozen",true);'>traffic_status/frozen</a></div>
+			</div>
 			<div class="row">
 				<div class="col-md-8">
 					<div class="panel panel-primary">

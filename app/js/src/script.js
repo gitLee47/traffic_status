@@ -1,4 +1,15 @@
-(function () {
+(function(){
+	loadAndStart("/traffic_status", false);
+})()
+
+function loadAndStart(endpoint, clear) {
+	if(clear) {
+		//console.log("true");
+		d3.select("#vizContainer").selectAll("svg").remove();
+		d3.select("#sentContainer").selectAll("svg").remove();
+		d3.select("#recievedContainer").selectAll("svg").remove();
+	}
+	
     function DataFetcher(urlFactory, delay) {
         var self = this;
 
@@ -46,7 +57,7 @@
 
     var $trafficStatusList = $("#mockTrafficStat"),
         df2 = new DataFetcher(function() {
-            return "/traffic_status";
+            return endpoint;
         });
 	var tempData = [];
     $(df2).on({
@@ -67,88 +78,92 @@
     });
 
     df2.start();
-})();
+};
 
-var width = 960,
-    height = 500;
-
-var color = d3.scale.category20();
-
-var force = d3.layout.force()
-	.gravity(.05)
-    .distance(200)
-    .charge(-100)
-    .size([width, height]);
-	
-//container for force graph
-var svg = d3.select("#vizContainer").append("svg")
-    .attr("width", width)
-    .attr("height", height)
-	//.append('svg:g')
-		.call(d3.behavior.zoom().on("zoom", redraw))
-	.append('svg:g');
-	
-//container for sent bar graph
-var margin = {top: 20, right: 20, bottom: 70, left: 40},
-    width = 600 - margin.left - margin.right,
-    height = 300 - margin.top - margin.bottom;
-	
-var sentBar = d3.select("#sentContainer").append("svg")
-			.attr("width", width + margin.left + margin.right)
-			.attr("height", height + margin.top + margin.bottom)
-		  .append("g")
-			.attr("transform", 
-				  "translate(" + margin.left + "," + margin.top + ")");
-				  
-	
-var recievedBar = d3.select("#recievedContainer").append("svg")
-			.attr("width", width + margin.left + margin.right)
-			.attr("height", height + margin.top + margin.bottom)
-		  .append("g")
-			.attr("transform", 
-				  "translate(" + margin.left + "," + margin.top + ")");
-				  
-var x = d3.scale.ordinal().rangeRoundBands([0, width], .1);
-var y = d3.scale.linear().range([height, 0]);
-
-var xAxis = d3.svg.axis()
-    .scale(x)
-    .orient("bottom");
-
-var yAxis = d3.svg.axis()
-.scale(y)
-.orient("left");
-
-function redraw() {
-  //console.log("here", d3.event.translate, d3.event.scale);
-  svg.attr("transform","translate(" + d3.event.translate + ")"+ " scale(" + d3.event.scale + ")");
-}
-	
-//implementing pinning
-var node_drag = d3.behavior.drag()
-        .on("dragstart", dragstart)
-        .on("drag", dragmove)
-        .on("dragend", dragend);
-    function dragstart(d, i) {
-		d3.event.sourceEvent.stopPropagation();
-        force.stop() // stops the force auto positioning before you start dragging
-    }
-    function dragmove(d, i) {
-        d.px += d3.event.dx;
-        d.py += d3.event.dy;
-        d.x += d3.event.dx;
-        d.y += d3.event.dy;
-    }
-    function dragend(d, i) {
-        d.fixed = true; // of course set the node to fixed so the force doesn't include the node in its auto positioning stuff
-        force.resume();
-    }
-    function releasenode(d) {
-        d.fixed = false; // of course set the node to fixed so the force doesn't include the node in its auto positioning stuff
-        //force.resume();
-    }	
 //Starting Code for building graph
 function createCharts(tdata) {
+	/* --------------Setup Start ------------------------------- */
+	
+	var width = 960,
+    height = 500;
+
+	var color = d3.scale.category20();
+
+	var force = d3.layout.force()
+		.gravity(.05)
+		.distance(200)
+		.charge(-100)
+		.size([width, height]);
+		
+	//container for force graph
+	var svg = d3.select("#vizContainer").append("svg")
+		.attr("width", width)
+		.attr("height", height)
+		//.append('svg:g')
+			.call(d3.behavior.zoom().on("zoom", redraw))
+		.append('svg:g');
+		
+	//container for sent bar graph
+	var margin = {top: 20, right: 20, bottom: 70, left: 40},
+		width = 600 - margin.left - margin.right,
+		height = 300 - margin.top - margin.bottom;
+		
+	var sentBar = d3.select("#sentContainer").append("svg")
+				.attr("width", width + margin.left + margin.right)
+				.attr("height", height + margin.top + margin.bottom)
+			  .append("g")
+				.attr("transform", 
+					  "translate(" + margin.left + "," + margin.top + ")");
+					  
+		
+	var recievedBar = d3.select("#recievedContainer").append("svg")
+				.attr("width", width + margin.left + margin.right)
+				.attr("height", height + margin.top + margin.bottom)
+			  .append("g")
+				.attr("transform", 
+					  "translate(" + margin.left + "," + margin.top + ")");
+					  
+	var x = d3.scale.ordinal().rangeRoundBands([0, width], .1);
+	var y = d3.scale.linear().range([height, 0]);
+
+	var xAxis = d3.svg.axis()
+		.scale(x)
+		.orient("bottom");
+
+	var yAxis = d3.svg.axis()
+	.scale(y)
+	.orient("left");
+
+	function redraw() {
+	  //console.log("here", d3.event.translate, d3.event.scale);
+	  svg.attr("transform","translate(" + d3.event.translate + ")"+ " scale(" + d3.event.scale + ")");
+	}
+		
+	//implementing pinning
+	var node_drag = d3.behavior.drag()
+			.on("dragstart", dragstart)
+			.on("drag", dragmove)
+			.on("dragend", dragend);
+		function dragstart(d, i) {
+			d3.event.sourceEvent.stopPropagation();
+			force.stop() // stops the force auto positioning before you start dragging
+		}
+		function dragmove(d, i) {
+			d.px += d3.event.dx;
+			d.py += d3.event.dy;
+			d.x += d3.event.dx;
+			d.y += d3.event.dy;
+		}
+		function dragend(d, i) {
+			d.fixed = true; // of course set the node to fixed so the force doesn't include the node in its auto positioning stuff
+			force.resume();
+		}
+		function releasenode(d) {
+			d.fixed = false; // of course set the node to fixed so the force doesn't include the node in its auto positioning stuff
+			//force.resume();
+		}	
+	/* --------------Setup End ------------------------------- */
+	
 	var links = tdata;
 	
 	var nodesByName = {};
