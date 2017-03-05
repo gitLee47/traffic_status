@@ -2,8 +2,16 @@
 	text-align: center;
 }
 
+.maincontainer {
+	margin-top:5%;
+}
+
 .summaryCont {
 	 height: 500px;
+}
+
+.node text {
+  font: 8px helvetica;
 }
 
 .footerBox {
@@ -36,7 +44,11 @@ th {
   background-color: #d4ffd4;
 } 
 
-.bar {
+.bar-sent {
+  fill: #d62728;
+}
+
+.bar-rec {
   fill: #2ca02c;
 }
 

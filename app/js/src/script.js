@@ -46,7 +46,7 @@
 
     var $trafficStatusList = $("#mockTrafficStat"),
         df2 = new DataFetcher(function() {
-            return "/traffic_status/frozen";
+            return "/traffic_status";
         });
 	var tempData = [];
     $(df2).on({
@@ -237,8 +237,13 @@ function createCharts(tdata) {
       .on('click', releasenode)
 	  .call(node_drag);
 	  
-	node.append("title")
-      .text( function(d) { return d.name;});
+	var nlabel = svg.selectAll(".circle")
+	   .data(nodes)
+	.enter().append('text')
+      .attr("dx", 10)
+      .attr("dy", ".35em")
+	  .text( function(d) {return d.name;})
+      .style("stroke", "gray");
 	  
 	node.on("mouseover", showDetails)
         .on("mouseout", hideDetails)
@@ -259,6 +264,14 @@ function createCharts(tdata) {
 	
 		node.attr("cx", function(d) { return d.x; })
 			.attr("cy", function(d) { return d.y; });
+			
+		//fixing label issue
+		nlabel.attr("x", function (d) {
+			return d.x;
+		})
+			.attr("y", function (d) {
+			return d.y;
+		});
 		
 		//label.attr("x", function(d) { return (d.source.x + d.target.x) / 2; }) 
         //.attr("y", function(d) { return (d.source.y + d.target.y) / 2; })
@@ -379,6 +392,31 @@ function createCharts(tdata) {
 
 	}
 	
+	//Legends for types	
+	var legend = svg.append("g");
+
+	legend.selectAll('g').data(color.domain())
+		.enter()
+		.append('g')
+		.each(function(d, i) {
+			var g = d3.select(this);
+			g.append("rect")
+				.attr("x", 45)
+				.attr("y", 320 + (i * 10))
+				.attr("width", 10)
+				.attr("height", 10)
+				.style("fill", color);
+
+			g.append("text")
+				.attr("x", 60)
+				.attr("y", 330 + (i * 10))
+				.attr("height", 30)
+				.attr("width", 100)
+				.style("fill", "black") //color_hash[String(i)][1]
+				.text(function(d) { if(d == null) return "undefined"; return d; });
+
+		});
+	
 	//Starting Sent Packets Bar Chart
 	var sentArr = [];
 	var k = Object.getOwnPropertyNames(sentTotal);
@@ -413,13 +451,13 @@ function createCharts(tdata) {
 	sentBar.selectAll(".bar")
       .data(sentArr)
     .enter().append("rect")
-      .attr("class", "bar")
+      .attr("class", "bar-sent")
       .attr("x", function(d) { return x(d.src); })
       .attr("y", function(d) { return y(d.packets); })
       .attr("height", function(d) { return height - y(d.packets); })
       .attr("width", x.rangeBand());
 	  
-	//Starting Recieved Packets Bar Chart
+	//Starting Received Packets Bar Chart
 	var recievedArr = [];
 	var k = Object.getOwnPropertyNames(recievedTotal);
     var v = Object.values(recievedTotal);
@@ -452,7 +490,7 @@ function createCharts(tdata) {
 	recievedBar.selectAll(".bar")
       .data(recievedArr)
     .enter().append("rect")
-      .attr("class", "bar")
+      .attr("class", "bar-rec")
       .attr("x", function(d) { return x(d.src); })
       .attr("y", function(d) { return y(d.packets); })
       .attr("height", function(d) { return height - y(d.packets); })
