@@ -99,9 +99,25 @@ var sentBar = d3.select("#sentContainer").append("svg")
 		  .append("g")
 			.attr("transform", 
 				  "translate(" + margin.left + "," + margin.top + ")");
-
+				  
+	
+var recievedBar = d3.select("#recievedContainer").append("svg")
+			.attr("width", width + margin.left + margin.right)
+			.attr("height", height + margin.top + margin.bottom)
+		  .append("g")
+			.attr("transform", 
+				  "translate(" + margin.left + "," + margin.top + ")");
+				  
 var x = d3.scale.ordinal().rangeRoundBands([0, width], .1);
 var y = d3.scale.linear().range([height, 0]);
+
+var xAxis = d3.svg.axis()
+    .scale(x)
+    .orient("bottom");
+
+var yAxis = d3.svg.axis()
+.scale(y)
+.orient("left");
 
 function redraw() {
   //console.log("here", d3.event.translate, d3.event.scale);
@@ -362,7 +378,8 @@ function createCharts(tdata) {
 		d3.select("#summTable").remove();
 
 	}
-
+	
+	//Starting Sent Packets Bar Chart
 	var sentArr = [];
 	var k = Object.getOwnPropertyNames(sentTotal);
     var v = Object.values(sentTotal);
@@ -373,15 +390,14 @@ function createCharts(tdata) {
 		sentArr.push({src:k[i], packets:v[i]})
     }
 	
-	//Starting sent Bar Chart
-	var xAxis = d3.svg.axis()
-    .scale(x)
-    .orient("bottom");
-
-	var yAxis = d3.svg.axis()
-    .scale(y)
-    .orient("left");
-
+	sentArr.sort(function(a, b) {
+		if ( a.src < b.src )
+			return -1;
+		if ( a.src > b.src )
+			return 1;
+		return 0;
+	});
+	
 	x.domain(sentArr.map(function(d) { return d.src; }));
 	y.domain([0, d3.max(sentArr, function(d) { return d.packets; })]);
 	
@@ -402,5 +418,46 @@ function createCharts(tdata) {
       .attr("y", function(d) { return y(d.packets); })
       .attr("height", function(d) { return height - y(d.packets); })
       .attr("width", x.rangeBand());
+	  
+	//Starting Recieved Packets Bar Chart
+	var recievedArr = [];
+	var k = Object.getOwnPropertyNames(recievedTotal);
+    var v = Object.values(recievedTotal);
+
+	for (var i = 0; i < k.length; i++)
+    {
+		recievedArr.push({src:k[i], packets:v[i]})
+    }
+	
+	recievedArr.sort(function(a, b) {
+		if ( a.src < b.src )
+			return -1;
+		if ( a.src > b.src )
+			return 1;
+		return 0;
+	});
+	
+	x.domain(recievedArr.map(function(d) { return d.src; }));
+	y.domain([0, d3.max(recievedArr, function(d) { return d.packets; })]);
+	
+	recievedBar.append("g")
+      .attr("class", "x axis")
+      .attr("transform", "translate(0," + height + ")")
+      .call(xAxis);
+
+	recievedBar.append("g")
+	  .attr("class", "y axis")
+	  .call(yAxis);
+
+	recievedBar.selectAll(".bar")
+      .data(recievedArr)
+    .enter().append("rect")
+      .attr("class", "bar")
+      .attr("x", function(d) { return x(d.src); })
+      .attr("y", function(d) { return y(d.packets); })
+      .attr("height", function(d) { return height - y(d.packets); })
+      .attr("width", x.rangeBand());
+	
+	
 }
 
