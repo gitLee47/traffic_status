@@ -114,8 +114,7 @@ function createCharts(tdata) {
 			  .append("g")
 				.attr("transform", 
 					  "translate(" + margin.left + "," + margin.top + ")");
-					  
-		
+					  		
 	var recievedBar = d3.select("#recievedContainer").append("svg")
 				.attr("width", width + margin.left + margin.right)
 				.attr("height", height + margin.top + margin.bottom)
@@ -155,11 +154,11 @@ function createCharts(tdata) {
 			d.y += d3.event.dy;
 		}
 		function dragend(d, i) {
-			d.fixed = true; // of course set the node to fixed so the force doesn't include the node in its auto positioning stuff
+			d.fixed = true; 
 			force.resume();
 		}
 		function releasenode(d) {
-			d.fixed = false; // of course set the node to fixed so the force doesn't include the node in its auto positioning stuff
+			d.fixed = false;
 			//force.resume();
 		}	
 	/* --------------Setup End ------------------------------- */
@@ -230,6 +229,7 @@ function createCharts(tdata) {
 			.attr("stroke", "#ddd")
 			.attr("stroke-opacity", 0.8)
 			.attr("marker-end", "url(#end)");
+			
 	/*
 	var label = svg.selectAll('text')
 			.data(links)
@@ -240,6 +240,7 @@ function createCharts(tdata) {
 			.attr("fill-opacity",0)
 			.text(function(d) {return d.traffic;}); 	
 	*/		
+	
 	// Create the node circles.
 	var node = svg.selectAll(".node")
       .data(nodes)
@@ -263,7 +264,7 @@ function createCharts(tdata) {
 	node.on("mouseover", showDetails)
         .on("mouseout", hideDetails)
 	  
-	// Start the force layout.
+	//Start the force layout.
 	force
       .nodes(nodes)
       .links(links)
@@ -294,11 +295,7 @@ function createCharts(tdata) {
 	 
 	//Mouseover function
 	function showDetails(d,i){
-		content = '<p class="">' + d.source + '</span></p>'
-		content += '<hr class="">'
-		content += '<p class="">' + d.target + '</span></p>'
-		//tooltip.showTooltip(content,d3.event)
-		//console.log(content);
+		
 		//higlight connected links
 		var tableData = [];
 		link.attr("stroke", function(l) {
@@ -354,6 +351,7 @@ function createCharts(tdata) {
 		
 		// render the table(s)
 		tabulate(tableData, ['srcObj', 'destObj','packets','traffic']); // 4 column table
+		
 		/*
 		label.attr("fill-opacity", function(l) {
 			if (l.source == d || l.target == d){ 
@@ -370,7 +368,7 @@ function createCharts(tdata) {
 		//marker[0][0].attr("stroke", "red")
 		 // .attr("stroke-opacity", 1.0);
 		
-		//highlight neighboring nodes
+		//highlight neighbouring nodes
 		node.style("stroke", function(n){
 			if (neighboring(d, n)){
 				return "red"; 
@@ -385,7 +383,6 @@ function createCharts(tdata) {
 				return 1.0;
 		});
 				
-	  
 		//highlight the node being moused over
 		d3.select(this).style("stroke","black")
 			.style("stroke-width", 2.0);
@@ -427,7 +424,7 @@ function createCharts(tdata) {
 				.attr("y", 330 + (i * 10))
 				.attr("height", 30)
 				.attr("width", 100)
-				.style("fill", "black") //color_hash[String(i)][1]
+				.style("fill", "black")
 				.text(function(d) { if(d == null) return "undefined"; return d; });
 
 		});
@@ -510,7 +507,31 @@ function createCharts(tdata) {
       .attr("y", function(d) { return y(d.packets); })
       .attr("height", function(d) { return height - y(d.packets); })
       .attr("width", x.rangeBand());
-	
-	
+}
+/* Functions for helper popup box  */
+function deselect(e) {
+  $('.pop').slideFadeToggle(function() {
+    e.removeClass('selected');
+  });    
 }
 
+$(function() {
+  $('#help').on('click', function() {
+    if($(this).hasClass('selected')) {
+      deselect($(this));               
+    } else {
+      $(this).addClass('selected');
+      $('.pop').slideFadeToggle();
+    }
+    return false;
+  });
+
+  $('.close').on('click', function() {
+    deselect($('#help'));
+    return false;
+  });
+});
+
+$.fn.slideFadeToggle = function(easing, callback) {
+  return this.animate({ opacity: 'toggle', height: 'toggle' }, 'fast', easing, callback);
+};

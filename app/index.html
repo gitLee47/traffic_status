@@ -43,11 +43,20 @@
 			</div>
 			<div class="row">
 				<div class="col-md-8">
+					<div class="messagepop pop">
+						<div class="well">
+							<ol>
+							  <li>Hover on any node to highlight other connected nodes and a table on the right which shows all details of packet flow between them.</li>
+							  <li>Use mouse scroll button to zoom in and out.</li>
+							  <li>Drag any node to pin it to a position. Single click on the node again to release it.</li>
+							</ol>
+						</div>
+						 <button class="close">Close</button>
+					</div>
 					<div class="panel panel-primary">
 						<!-- Default panel contents -->
-						<div id="graphHeading" class="panel-heading center">Graph</div>
-					  
-
+						<div id="graphHeading" class="panel-heading center">Graph <button id="help" type="button" class="helpbtn pull-right">Help</button> </div>
+						<!-- Graph  -->
 						<div id="vizContainer">
 					   
 						</div>
@@ -93,7 +102,7 @@
 		</div>
 		<div class="center"><div class="footerBox">
 			<p class="footerLinks"> 
-			<a href="mailto:lrg37@pitt.edu">Contact |</a> <a href="http://localhost:8000/"> Home </a></p><p> This site is created and maintained by <a href="http://www.pitt.edu/~lrg37/" target="_blank">Liju Robin George</a>. <br> This application is a non-profit prototype.</p>
+			<a href="mailto:lrg37@pitt.edu">Contact |</a> <a href="http://localhost:8000/"> Home </a></p><p> This application is created and maintained by <a href="http://www.pitt.edu/~lrg37/" target="_blank">Liju Robin George</a>. <br> This application is a non-profit prototype.</p>
 			</div>
 		</div>
         <script src="js/mockAPIs.js"></script>
