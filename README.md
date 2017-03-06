@@ -13,6 +13,7 @@ Steps to set-up and run the visualisation:
 5. Navigate to localhost:8000/ on any browser to view the application.
 
 Note about the application:
+
 1. The application can read from two apis: traffic_status and traffic_status/frozen
 2. There is a selection button in the application to choose reading from a specific api.
 3. The top left canvas diplays the main visualisation, which show nodes and their connections. 
