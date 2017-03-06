@@ -170,7 +170,6 @@ function createCharts(tdata) {
 	var sentTotal = new Object();
 	var recievedTotal =  new Object();
 	
-	
 	links.forEach(function(link) {
 		if(link.srcObj != null || link.destObj != null) {
 			link.source = nodeByName(link.srcObj,link.srcType);
@@ -230,17 +229,6 @@ function createCharts(tdata) {
 			.attr("stroke-opacity", 0.8)
 			.attr("marker-end", "url(#end)");
 			
-	/*
-	var label = svg.selectAll('text')
-			.data(links)
-		  .enter().append('text')
-			//.attr("x", function(d) { return (d.source.y + d.target.y) / 2; }) 
-			//.attr("y", function(d) { return (d.source.x + d.target.x) / 2; }) 
-			.attr("text-anchor", "middle") 
-			.attr("fill-opacity",0)
-			.text(function(d) {return d.traffic;}); 	
-	*/		
-	
 	// Create the node circles.
 	var node = svg.selectAll(".node")
       .data(nodes)
@@ -288,9 +276,6 @@ function createCharts(tdata) {
 			.attr("y", function (d) {
 			return d.y;
 		});
-		
-		//label.attr("x", function(d) { return (d.source.x + d.target.x) / 2; }) 
-        //.attr("y", function(d) { return (d.source.y + d.target.y) / 2; })
 	}
 	 
 	//Mouseover function
@@ -313,6 +298,8 @@ function createCharts(tdata) {
 			else 
 				return 0.5;
 		});
+		
+		//Start summary table creation
 		var table;
 		function tabulate(data, columns) {
 			table = d3.select('#summary')
@@ -352,22 +339,6 @@ function createCharts(tdata) {
 		// render the table(s)
 		tabulate(tableData, ['srcObj', 'destObj','packets','traffic']); // 4 column table
 		
-		/*
-		label.attr("fill-opacity", function(l) {
-			if (l.source == d || l.target == d){ 
-				return 1; 
-			}
-			else { 
-				return 0;
-			}
-		});*/
-		
-		//highlighting marker
-		//console.log(link);
-		//marker[0][0].style.stroke = "red"
-		//marker[0][0].attr("stroke", "red")
-		 // .attr("stroke-opacity", 1.0);
-		
 		//highlight neighbouring nodes
 		node.style("stroke", function(n){
 			if (neighboring(d, n)){
@@ -397,8 +368,6 @@ function createCharts(tdata) {
 
 		link.attr("stroke", "#ddd")
 			.attr("stroke-opacity", 0.8);
-		
-		//label.attr("fill-opacity", 0);
 		
 		d3.select("#summTable").remove();
 
